@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balaji Silks</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand-block">
+        <img class="brand-logo" src="images/logo.png" alt="Balaji Silks logo" width="200" height="200">
+        <div class="brand-text">
+          <div class="brand">Balaji Silks</div>
+          <div class="brand-tagline">Woven Traditions | Worn with Pride</div>
+        </div>
+      </div>
+      <div class="tabs">
+        <a href="#home">Home</a>
+        <a href="#sarees">Sarees</a>
+        <a href="#cart">Cart</a>
+        <a href="#feedback">Feedback</a>
+        <a href="#about">About Us</a>
+      </div>
+      <div class="search">
+        <input id="productSearch" type="search" placeholder="Search sarees..." aria-label="Search sarees">
+        <button type="button" id="productSearchBtn" class="search-btn">
+          <span>🔍</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <img class="banner active" src="images/banner2.jpeg" alt="Saree banner 1">
+    <img class="banner" src="images/banner3.jpeg" alt="Saree banner 2">
+    <div class="overlay"></div>
+  </section>
+
+  <section id="sarees" class="page-section">
+    <div class="section-heading">
+      <div class="heading-motif">₹</div>
+      <h2>Sarees</h2>
+    </div>
+    <div class="heading-underline"></div>
+    <p class="tagline">Stories from every loom – explore handpicked sarees for every celebration.</p>
+    <div id="products" class="grid"></div>
+  </section>
+
+  <section id="cart" class="page-section">
+    <div class="section-heading">
+      <div class="heading-motif">🧺</div>
+      <h2>Cart</h2>
+    </div>
+    <div class="heading-underline"></div>
+    <p class="tagline">Your chosen drapes so far. Review, refine, and get ready to checkout.</p>
+    <div class="cart-list" id="cartList"></div>
+    <div class="cart-summary" id="cartSummary">No items yet.</div>
+    <div class="section-heading" style="margin-top:32px;">
+      <div class="heading-motif">♡</div>
+      <h2>Wishlist</h2>
+    </div>
+    <div class="heading-underline"></div>
+    <p class="tagline">Sarees you love, saved for later – your personal treasure list.</p>
+    <div class="wish-list" id="wishlist"></div>
+  </section>
+
+  <section id="feedback" class="page-section">
+    <div class="section-heading">
+      <div class="heading-motif">✉️</div>
+      <h2>Feedback</h2>
+    </div>
+    <div class="heading-underline"></div>
+    <p class="tagline">Share your thoughts so we can weave an even better Balaji Silks experience.</p>
+    <div class="feedback-card">
+      <form id="feedbackForm">
+        <input type="text" id="name" placeholder="Your name" required />
+        <input type="email" id="email" placeholder="Email (optional)" />
+        <textarea id="message" placeholder="Your feedback" required></textarea>
+
+
+        <!-- Added: format selector + save/load controls -->
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <label for="saveFormat" class="tagline" style="margin:0;">Save as:</label>
+          <select id="saveFormat" aria-label="Select file format">
+            <option value="txt">Notepad (.txt)</option>
+            <option value="xlsx">Excel (.xlsx)</option>
+          </select>
+          <button type="submit" id="shareFeedbackBtn" class="submit">Share feedback</button>
+        </div>
+
+        <p id="feedbackStatus" class="tagline"></p>
+      </form>
+    </div>
+  </section>
+
+  <div id="lightbox" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-modal" aria-label="Close gallery">×</button>
+      <div class="modal-main">
+        <img id="modalImg" alt="Saree view">
+        <p id="modalDesc" class="tagline"></p>
+      </div>
+      <div class="modal-thumbs" id="modalThumbs"></div>
+      <div class="modal-nav">
+        <button class="nav-btn" id="prevImg">⟵ Previous</button>
+        <button class="nav-btn" id="nextImg">Next ⟶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restored About Us section (expanded) -->
+  <section id="about" class="page-section">
+    <div class="section-heading">
+      <div class="heading-motif">ℹ️</div>
+      <h2>About Us</h2>
+    </div>
+    <div class="heading-underline"></div>
+    <p class="tagline">Balaji Silks is a family-owned house of traditional Indian textiles, bringing handcrafted sarees from skilled weavers to your wardrobe. We focus on sustainable sourcing, fair artisan pay, and preserving regional weaving techniques.</p>
+    <div class="card">
+      <p><strong>Our Story:</strong> Founded in 1998 by the Reddy family, Balaji Silks began as a small storefront committed to authentic handloom sarees. Over two decades we have grown into a trusted curator of regional weaves while maintaining close relationships with the weaving communities that create them.</p>
+
+      <p><strong>What we do:</strong> We source directly from artisan clusters across South India and beyond — Kanchipuram, Banaras, Gadwal, Pochampally and more. Each saree is inspected for weave quality, dye fastness, and finishing before it reaches our collection.</p>
+
+      <p><strong>Our mission:</strong> To preserve traditional weaving techniques, provide sustainable livelihoods for artisans, and offer customers lasting pieces that celebrate heritage and craftsmanship.</p>
+
+      <p><strong>Sustainability & Fair Trade:</strong> We prioritize natural fibers, low-impact dyes, and transparent pricing. We work with verified co-operatives and provide training and fair compensation programs to artisan partners.</p>
+
+      <p><strong>Community impact:</strong> Balaji Silks runs outreach initiatives — weaving workshops, micro-credit support for artisan families, and seasonal skill-development camps — to strengthen the communities we depend on.</p>
+
+      <p><strong>Visit us:</strong> Our flagship store is located in Chennai. For wholesale inquiries, custom orders, or collaborations, email <a href="mailto:hello@balajisilks.example">hello@balajisilks.example</a> or call +91-44-1234-5678.</p>
+
+      <p><strong>Customer promise:</strong> Authenticity guaranteed, attentive returns & alterations, and personalised styling support for all celebrations.</p>
+
+      <p style="margin-top:12px;"><em>Thank you for supporting handcrafted textiles — every purchase helps keep a centuries-old craft alive.</em></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-wrap">
+      <div class="footer-brand">
+        <img src="images/logo.png" alt="Balaji Silks">
+        <div class="footer-contact">
+          <div class="footer-pill">📞 6281748574</div>
+          <div class="footer-pill">✉️ balajisilks16@gmail.com</div>
+          <a class="footer-text" href="#">Track Your Order</a>
+          <a class="footer-text" href="#">Stores</a>
+          <div class="footer-social">
+            <span class="footer-pill">𝕗</span>
+            <span class="footer-pill">🖼️</span>
+            <span class="footer-pill">▶️</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Shop</h4>
+        <ul class="footer-list">
+          <li><a href="#">Festive</a></li>
+          <li><a href="#">Wedding</a></li>
+          <li><a href="#">Party</a></li>
+          <li><a href="#">Video Call Shopping</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Get to Know Us</h4>
+        <ul class="footer-list">
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Awards</a></li>
+          <li><a href="#">Media</a></li>
+          <li><a href="#">Stores</a></li>
+          <li><a href="#">Virtual Tour</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">User Policy</h4>
+        <ul class="footer-list">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+          <li><a href="#">Disclaimer</a></li>
+          <li><a href="#">Return Policy</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Join Our Newsletter</h4>
+        <div class="newsletter">
+          <p class="footer-text">Sign up for updates and offers.</p>
+          <form>
+            <input type="email" placeholder="Your email" aria-label="Email for newsletter">
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        <h4 class="footer-heading" style="margin-top:16px;">Stay Connected</h4>
+        <p class="footer-text">Get Latest Updates From Us</p>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">We Accept</h4>
+        <div class="payment-logos">
+          <span>VISA</span>
+          <span>Mastercard</span>
+          <span>UPI</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© Copyright 2024 Balaji Silks. All Rights Reserved</span>
+      <span>Made with care in India</span>
+    </div>
+  </footer>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="script.js"></script>
+    
+</body>
+</html>
+
