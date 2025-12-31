@@ -177,6 +177,9 @@
       gap: 22px;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
+
+    /* Collection styles removed */
+
     .card {
       background: white;
       border-radius: 16px;
@@ -184,7 +187,7 @@
       padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 12px; 
     }
     .main-image {
       position: relative;
@@ -292,9 +295,72 @@
       display: grid;
       gap: 2px;
     }
+
+    /* Cart quantity controls */
+    .cart-controls {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cart-qty-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: #fff6fb;
+      color: var(--accent);
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-grid;
+      place-items: center;
+    }
+    .cart-qty {
+      min-width: 20px;
+      text-align: center;
+      font-weight: 700;
+      color: #333;
+    }
+    .cart-qty-btn:active {
+      transform: translateY(1px);
+    }
+
     .cart-summary {
       margin-top: 14px;
       font-weight: 700;
+    }
+
+    /* Stylish cart summary */
+    .cart-summary-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: linear-gradient(180deg, #fff, #fff7fb);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border: 1px solid rgba(194,24,91,0.06);
+    }
+    .cart-summary-row {
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+    .cart-items-count {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .cart-total-amount {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--accent);
+    }
+    .cart-summary-note {
+      color: var(--muted);
+      font-size: 0.85rem;
     }
     form {
       display: grid;
@@ -307,6 +373,11 @@
       border: 1px solid #ddd;
       font: inherit;
     }
+    input.error, textarea.error {
+      border-color: #e53935;
+      box-shadow: 0 0 0 6px rgba(229,57,53,0.06);
+    }
+    .error-message { color: #e53935; font-weight: 600; margin: 4px 0 0; }
     textarea { min-height: 110px; resize: vertical; }
     .submit {
       background: var(--accent);
@@ -327,6 +398,19 @@
       position: relative;
       overflow: hidden;
     }
+
+    /* Star rating styles */
+    .stars .star {
+      color: #dcdcdc;
+      font-size: 1.35rem;
+      cursor: pointer;
+      transition: color .12s ease, transform .08s ease;
+      user-select: none;
+      line-height: 1;
+    }
+    .stars .star:hover { transform: translateY(-2px); }
+    .stars .star.hover, .stars .star.selected { color: #f5c542; text-shadow: 0 1px 0 rgba(0,0,0,0.06); }
+    .stars .star:focus { outline: 2px solid rgba(245,197,66,0.25); outline-offset: 2px; border-radius: 4px; }
     #feedback::before, #feedback::after {
       content: "";
       position: absolute;
@@ -346,6 +430,57 @@
       box-shadow: inset 0 0 0 1px #f0d8e5;
       margin: 0 auto;
       max-width: 640px;
+    }
+
+    /* Login styling */
+    .login-card {
+      background: white;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      margin: 0 auto;
+      max-width: 480px;
+    }
+    .login-card input {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font: inherit;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #loginStatus { min-height: 18px; margin: 0; }
+
+    /* Remember-me layout */
+    .login-card .remember {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .login-card .remember input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      transform: translateY(1px);
+    }
+    .login-card .remember .remember-text { margin-left: 4px; }
+
+    @media (max-width: 420px) {
+      .login-card .remember { white-space: normal; gap: 6px; }
+      .login-card .remember .remember-text { display: inline; }
+    }
+
+    /* Header profile / user actions */
+    .user-actions { margin-left: 12px; display: flex; align-items: center; gap: 8px; order: 4; }
+    #profileBtn { padding: 8px 12px; border-radius: 999px; font-weight: 700; background: #fff; color: var(--accent); border: 1px solid #f0d8e5; cursor: pointer; }
+    #profileBtn:hover { filter: brightness(0.98); }
+
+    @media (max-width: 640px) {
+      .user-actions { order: 4; margin-left: 0; }
     }
     .feedback-card form { margin: 0 auto; }
     .submit { justify-self: center; padding: 12px 24px; }
@@ -481,6 +616,30 @@
       gap: 10px;
       margin-top: 6px;
     }
+
+    /* Social icons for Stay Connected */
+    .social-icons { display:flex; gap:10px; margin-top:8px; }
+    .social-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      text-decoration:none;
+      border: none;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      color: white;
+      transition: transform 0.14s ease, opacity 0.14s ease;
+    }
+    .social-btn svg { width:20px; height:20px; display:block; }
+    .social-btn:hover { transform: translateY(-4px); opacity: 0.98; }
+    .social-btn.instagram { background: linear-gradient(45deg,#f58529,#dd2a7b,#8134af); color: #fff; }
+    .social-btn.whatsapp { background: #25D366; color: #fff; }
+    .social-btn.mail { background: #D44638; color: #fff; }
+    .social-btn.phone { background: #1c1b1f; color: #fff; }
+    @media (max-width:640px) { .social-btn { width:40px; height:40px; } }
     .footer-pill {
       display: inline-flex;
       align-items: center;

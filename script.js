@@ -30,6 +30,7 @@
       {
         id: "red-kanjivaram",
         name: "Red Kanjivaram Saree",
+        category: "wedding",
         price: 7499,
         description: "Traditional Kanjivaram with bold red body and zari border.",
         images: [
@@ -48,6 +49,7 @@
       {
         id: "blue-banarasi",
         name: "Blue Banarasi Saree",
+        category: "festive",
         price: 6899,
         description: "Handwoven Banarasi with intricate motifs on a royal blue base.",
         images: [
@@ -66,6 +68,7 @@
       {
         id: "pastel-linen",
         name: "Pastel Linen Saree",
+        category: "party",
         price: 3199,
         description: "Lightweight linen in soft pastels for everyday elegance.",
         images: [
@@ -84,6 +87,7 @@
       {
         id: "mysore-silk",
         name: "Mysore Silk Saree",
+        category: "festive",
         price: 5799,
         description: "Pure Mysore silk with minimalist zari for timeless grace.",
         images: [
@@ -102,6 +106,7 @@
       {
         id: "gadwal-pattu",
         name: "Gadwal Pattu Saree",
+        category: "wedding",
         price: 7999,
         description: "Contrast Gadwal pattu with rich temple borders.",
         images: [
@@ -120,6 +125,7 @@
       {
         id: "butta-design",
         name: "Butta Design Saree",
+        category: "party",
         price: 4499,
         description: "All-over butta motifs on a soft silk blend for daily chic.",
         images: [
@@ -138,12 +144,180 @@
     ];
 
     const formatPrice = (n) => `₹${n.toLocaleString("en-IN")}`;
+
+    // Validation helpers
+    function validateEmail(email) {
+      if (!email) return false;
+      // Basic, permissive email pattern: local@domain.tld
+      const re = /^\S+@\S+\.\S+$/;
+      return re.test(String(email).trim());
+    }
+
+    function validatePassword(pwd) {
+      if (!pwd) return false;
+      // Minimum length 8 and must include a letter, a number and a special character
+      return pwd.length >= 8 && /[A-Za-z]/.test(pwd) && /\d/.test(pwd) && /[^A-Za-z0-9]/.test(pwd);
+    }
+
     const cart = [];
     const wish = new Set();
     const productControls = {};
     let currentProduct = null;
     let currentIndex = 0;
     const heroSection = document.querySelector(".hero");
+
+    // --- Authentication (simple client-side mock for demo) ---
+    const loginForm = document.getElementById("loginForm");
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+    const loginStatus = document.getElementById("loginStatus");
+    const rememberMe = document.getElementById("rememberMe");
+    const guestBtn = document.getElementById("guestBtn");
+    const loginTab = document.getElementById("loginTab");
+
+    const AUTH_KEY = "balaji:auth";
+    const VISIT_KEY = "balaji:visited";
+    const GUEST_KEY = "balaji:guest";
+    let currentUser = null;
+
+    function isAuthenticated() { return !!currentUser; }
+
+    function saveAuth(user, remember = false) {
+      currentUser = user;
+      if (remember) {
+        try { localStorage.setItem(AUTH_KEY, JSON.stringify(user)); } catch (e) {}
+      }
+      updateAuthUI();
+    }
+
+    function clearAuth() {
+      currentUser = null;
+      try { localStorage.removeItem(AUTH_KEY); } catch (e) {}
+      updateAuthUI();
+    }
+
+    function updateAuthUI() {
+      if (loginTab) {
+        if (currentUser) {
+          loginTab.textContent = "Profile";
+        } else {
+          loginTab.textContent = "Login";
+        }
+      }
+    }
+
+    function initAuth() {
+      try {
+        const raw = localStorage.getItem(AUTH_KEY);
+        if (raw) currentUser = JSON.parse(raw);
+      } catch (e) {}
+      updateAuthUI();
+      try {
+        const visited = localStorage.getItem(VISIT_KEY);
+        const guest = localStorage.getItem(GUEST_KEY);
+        if (!visited && !currentUser && !guest) {
+          if (loginStatus) loginStatus.textContent = "Welcome! Please sign in or continue as guest.";
+          showSection("login");
+        }
+      } catch (e) {}
+    }
+
+    if (loginForm) {
+      if (loginEmail) loginEmail.addEventListener('input', () => { loginEmail.classList.remove('error'); if (loginStatus) loginStatus.textContent = ''; });
+      if (loginPassword) loginPassword.addEventListener('input', () => { loginPassword.classList.remove('error'); if (loginStatus) loginStatus.textContent = ''; });
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = loginEmail.value.trim();
+        const pwd = loginPassword.value;
+        if (!email || !pwd) {
+          if (loginStatus) loginStatus.textContent = "Please enter email and password.";
+          if (!email) { loginEmail.classList.add('error'); loginEmail.focus(); }
+          if (!pwd) { loginPassword.classList.add('error'); loginPassword.focus(); }
+          return;
+        }
+        if (!validateEmail(email)) {
+          if (loginStatus) loginStatus.textContent = "Please enter a valid email address.";
+          loginEmail.classList.add('error'); loginEmail.focus();
+          return;
+        }
+        if (!validatePassword(pwd)) {
+          if (loginStatus) loginStatus.textContent = "Password must be at least 8 characters and include one letter, one number, and one special character.";
+          loginPassword.classList.add('error'); loginPassword.focus();
+          return;
+        }
+        // Mock authentication: accept any credentials for demo
+        const user = { email };
+        saveAuth(user, rememberMe && rememberMe.checked);
+        try { localStorage.setItem(VISIT_KEY, "1"); localStorage.removeItem(GUEST_KEY); } catch (e) {}
+        try {
+          const hash = await hashPassword(pwd);
+          saveLoginRecord({ email, hash, ts: new Date().toISOString() }, "txt");
+          if (loginStatus) loginStatus.textContent = `Signed in as ${email}.`;
+        } catch (err) {
+          console.error(err);
+          if (loginStatus) loginStatus.textContent = `Signed in as ${email}.`;
+        }
+        loginForm.reset();
+        showSection("sarees");
+      });
+
+    // Save login as TXT (simple download)
+    function saveLoginAsTxt(payload) {
+      const filename = `logins_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.txt`;
+      const content = `Saved: ${new Date().toISOString()}\nEmail: ${payload.email || ""}\nPasswordHash: ${payload.hash || ""}\n`;
+      downloadBlob(content, filename, "text/plain");
+      return `Downloaded ${filename}`;
+    }
+
+    // Generic save function — choose format
+    function saveLoginRecord(payload, format = "txt") {
+      if (format === "txt") return saveLoginAsTxt(payload);
+      return saveLoginAsXlsx(payload);
+    }
+    }
+
+    if (guestBtn) {
+      guestBtn.addEventListener("click", () => {
+        try { localStorage.setItem(VISIT_KEY, "1"); localStorage.setItem(GUEST_KEY, "1"); } catch (e) {}
+        if (loginStatus) loginStatus.textContent = "";
+        showSection("sarees");
+      });
+    }
+
+
+
+    // initialize auth state on load
+    initAuth();
+
+    // Hash helper — returns hex SHA-256
+    async function hashPassword(password) {
+      const enc = new TextEncoder();
+      const data = enc.encode(password);
+      const digest = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Save login record to a separate XLSX (or CSV fallback)
+    function saveLoginAsXlsx(payload) {
+      if (!window.XLSX) {
+        const csv = `"Saved","${new Date().toISOString()}"\n"Email","${(payload.email||'').replace(/"/g,'""')}"\n"PasswordHash","${payload.hash||''}"\n`;
+        const filename = `logins_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+        downloadBlob(csv, filename, "text/csv");
+        return `Downloaded ${filename} (CSV fallback)`;
+      }
+      const ws_data = [
+        ["Saved", new Date().toISOString()],
+        [],
+        ["Email", payload.email || ""],
+        ["PasswordHash", payload.hash || ""]
+      ];
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+      XLSX.utils.book_append_sheet(wb, ws, "Logins");
+      const filename = `logins_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.xlsx`;
+      XLSX.writeFile(wb, filename);
+      return `Downloaded ${filename}`;
+    }
 
     const productContainer = document.getElementById("products");
     products.forEach((p) => {
@@ -219,6 +393,12 @@
     });
 
     function addToCart(product) {
+      if (!isAuthenticated()) {
+        showSection("login");
+        const ls = document.getElementById("loginStatus");
+        if (ls) ls.textContent = "Please sign in to add items to cart.";
+        return;
+      }
       const existing = cart.find((c) => c.id === product.id);
       if (existing) {
         existing.qty += 1;
@@ -226,6 +406,7 @@
         cart.push({ ...product, qty: 1 });
       }
       renderCart();
+      updateProductControls();
     }
 
     function changeQuantity(product, delta) {
@@ -244,6 +425,12 @@
     }
 
     function toggleWish(product, btn) {
+      if (!isAuthenticated()) {
+        showSection("login");
+        const ls = document.getElementById("loginStatus");
+        if (ls) ls.textContent = "Please sign in to save to wishlist.";
+        return;
+      }
       if (wish.has(product.id)) {
         wish.delete(product.id);
         btn.classList.remove("active");
@@ -277,16 +464,51 @@
         const title = document.createElement("strong");
         title.textContent = item.name;
         const meta = document.createElement("span");
-        meta.textContent = `Qty: ${item.qty} · ${formatPrice(item.price * item.qty)}`;
+        meta.textContent = `${formatPrice(item.price * item.qty)}`;
         text.append(title, meta);
 
-        row.append(thumb, text);
+        // quantity controls in cart
+        const controls = document.createElement("div");
+        controls.className = "cart-controls";
+
+        const minusBtn = document.createElement("button");
+        minusBtn.className = "cart-qty-btn";
+        minusBtn.type = "button";
+        minusBtn.textContent = "−";
+        minusBtn.setAttribute('aria-label', `Decrease quantity of ${item.name}`);
+        minusBtn.onclick = () => changeQuantity(item, -1);
+
+        const qtyDisplay = document.createElement("span");
+        qtyDisplay.className = "cart-qty";
+        qtyDisplay.textContent = item.qty;
+
+        const plusBtn = document.createElement("button");
+        plusBtn.className = "cart-qty-btn";
+        plusBtn.type = "button";
+        plusBtn.textContent = "+";
+        plusBtn.setAttribute('aria-label', `Increase quantity of ${item.name}`);
+        plusBtn.onclick = () => changeQuantity(item, 1);
+
+        controls.append(minusBtn, qtyDisplay, plusBtn);
+
+        row.append(thumb, text, controls);
         list.appendChild(row);
       });
       const summary = document.getElementById("cartSummary");
-      summary.textContent = cart.length
-        ? `Total: ${formatPrice(total)} (Shipping within India)`
-        : "No items yet.";
+      if (cart.length) {
+        const itemCount = cart.reduce((s, it) => s + it.qty, 0);
+        summary.innerHTML = `
+          <div class="cart-summary-card">
+            <div class="cart-summary-row">
+              <div class="cart-items-count">${itemCount} item${itemCount>1? 's':''}</div>
+              <div class="cart-total-amount">${formatPrice(total)}</div>
+            </div>
+            <div class="cart-summary-note">Shipping within India</div>
+          </div>
+        `;
+      } else {
+        summary.textContent = 'No items yet.';
+      }
     }
 
     function updateProductControls() {
@@ -338,6 +560,8 @@
         });
     }
 
+    /* Collections removed: tiles and footer category highlights */
+
     // product search
     const searchInput = document.getElementById("productSearch");
     const searchBtn = document.getElementById("productSearchBtn");
@@ -383,7 +607,8 @@
 
     function buildTextContent(obj) {
       const ts = new Date().toISOString();
-      return `Saved: ${ts}\nName: ${obj.name}\nEmail: ${obj.email}\n\nMessage:\n${obj.message}\n`;
+      const ratingLine = (typeof obj.rating !== 'undefined' && obj.rating !== '') ? `Rating: ${obj.rating}\n` : '';
+      return `Saved: ${ts}\nName: ${obj.name}\nEmail: ${obj.email}\n${ratingLine}\nMessage:\n${obj.message}\n`;
     }
 
     function downloadBlob(content, filename, type = "text/plain") {
@@ -408,7 +633,7 @@
     function saveAsXlsx(payload) {
       if (!window.XLSX) {
         // fallback to CSV if SheetJS not available
-        const csv = `"Saved","${new Date().toISOString()}"\n"Name","${(payload.name||"").replace(/"/g,'""')}"\n"Email","${(payload.email||"").replace(/"/g,'""')}"\n"Message","${(payload.message||"").replace(/"/g,'""')}"\n`;
+        const csv = `"Saved","${new Date().toISOString()}"\n"Name","${(payload.name||"").replace(/"/g,'""')}"\n"Email","${(payload.email||"").replace(/"/g,'""')}"\n"Rating","${(payload.rating||"").replace(/"/g,'""')}"\n"Message","${(payload.message||"").replace(/"/g,'""')}"\n`;
         const filename = `feedback_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
         downloadBlob(csv, filename, "text/csv");
         return `Downloaded ${filename} (CSV fallback)`;
@@ -418,6 +643,7 @@
         [],
         ["Name", payload.name || ""],
         ["Email", payload.email || ""],
+        ["Rating", payload.rating || ""],
         [],
         ["Message", payload.message || ""]
       ];
@@ -429,19 +655,64 @@
       return `Downloaded ${filename}`;
     }
 
+    // Initialize interactive star rating widget
+    (function initStarRating(){
+      const starContainer = document.getElementById('starRating');
+      const ratingInput = document.getElementById('ratingValue');
+      if (!starContainer || !ratingInput) return;
+      const stars = Array.from(starContainer.querySelectorAll('.star'));
+
+      function renderHover(n) {
+        stars.forEach((s, i) => s.classList.toggle('hover', i < n));
+      }
+      function setRating(n) {
+        ratingInput.value = n ? String(n) : '';
+        stars.forEach((s, i) => {
+          s.classList.toggle('selected', i < n);
+          s.setAttribute('aria-checked', i < n ? 'true' : 'false');
+          s.tabIndex = i === (n - 1) ? 0 : -1;
+        });
+      }
+
+      stars.forEach((s, idx) => {
+        const val = idx + 1;
+        s.addEventListener('mouseover', () => renderHover(val));
+        s.addEventListener('mouseout', () => renderHover(Number(ratingInput.value) || 0));
+        s.addEventListener('click', () => setRating(val));
+        s.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setRating(val); }
+          if (e.key === 'ArrowRight' && idx < stars.length - 1) { stars[idx + 1].focus(); }
+          if (e.key === 'ArrowLeft' && idx > 0) { stars[idx - 1].focus(); }
+        });
+      });
+
+      // expose default state
+      renderHover(0);
+      setRating(0);
+    })();
+
     feedbackForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const payload = {
-        name: document.getElementById("name").value || "",
-        email: document.getElementById("email").value || "",
-        message: document.getElementById("message").value || ""
-      };
+      const nameVal = document.getElementById("name").value || "";
+      const emailVal = document.getElementById("email").value.trim() || "";
+      const messageVal = document.getElementById("message").value || "";
+      const ratingVal = document.getElementById('ratingValue') ? document.getElementById('ratingValue').value : "";
+
+      // Validate email
+      const emailEl = document.getElementById("email");
+      if (!validateEmail(emailVal)) {
+        feedbackStatus.textContent = "Please enter a valid email address.";
+        if (emailEl) { emailEl.classList.add('error'); emailEl.focus(); }
+        return;
+      }
+
+      const payload = { name: nameVal, email: emailVal, message: messageVal, rating: ratingVal };
       feedbackStatus.textContent = "Preparing file...";
       const format = saveFormat.value || "txt";
       try {
         let msg = "";
 
-    if (format === "xlsx") {
+        if (format === "xlsx") {
           msg = saveAsXlsx(payload);
         } else {
           msg = saveAsTxt(payload);
@@ -453,6 +724,9 @@
         feedbackStatus.textContent = "Save failed.";
       }
     });
+
+    // Newsletter functionality removed — subscriptions are disabled to stop collecting emails. The login record export remains for admin use via the existing login export button.
+
     //banner rotation
     const banners = Array.from(document.querySelectorAll(".banner"));
     let bannerIndex = 0;
