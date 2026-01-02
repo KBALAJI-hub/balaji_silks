@@ -607,8 +607,7 @@
 
     function buildTextContent(obj) {
       const ts = new Date().toISOString();
-      const ratingLine = (typeof obj.rating !== 'undefined' && obj.rating !== '') ? `Rating: ${obj.rating}\n` : '';
-      return `Saved: ${ts}\nName: ${obj.name}\nEmail: ${obj.email}\n${ratingLine}\nMessage:\n${obj.message}\n`;
+      return `Saved: ${ts}\nName: ${obj.name}\nEmail: ${obj.email}\nMessage:\n${obj.message}\n`;
     }
 
     function downloadBlob(content, filename, type = "text/plain") {
@@ -633,7 +632,7 @@
     function saveAsXlsx(payload) {
       if (!window.XLSX) {
         // fallback to CSV if SheetJS not available
-        const csv = `"Saved","${new Date().toISOString()}"\n"Name","${(payload.name||"").replace(/"/g,'""')}"\n"Email","${(payload.email||"").replace(/"/g,'""')}"\n"Rating","${(payload.rating||"").replace(/"/g,'""')}"\n"Message","${(payload.message||"").replace(/"/g,'""')}"\n`;
+        const csv = `"Saved","${new Date().toISOString()}"\n"Name","${(payload.name||"").replace(/"/g,'""')}"\n"Email","${(payload.email||"").replace(/"/g,'""')}"\n"Message","${(payload.message||"").replace(/"/g,'""')}"\n`;
         const filename = `feedback_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
         downloadBlob(csv, filename, "text/csv");
         return `Downloaded ${filename} (CSV fallback)`;
@@ -643,7 +642,6 @@
         [],
         ["Name", payload.name || ""],
         ["Email", payload.email || ""],
-        ["Rating", payload.rating || ""],
         [],
         ["Message", payload.message || ""]
       ];
@@ -655,48 +653,13 @@
       return `Downloaded ${filename}`;
     }
 
-    // Initialize interactive star rating widget
-    (function initStarRating(){
-      const starContainer = document.getElementById('starRating');
-      const ratingInput = document.getElementById('ratingValue');
-      if (!starContainer || !ratingInput) return;
-      const stars = Array.from(starContainer.querySelectorAll('.star'));
 
-      function renderHover(n) {
-        stars.forEach((s, i) => s.classList.toggle('hover', i < n));
-      }
-      function setRating(n) {
-        ratingInput.value = n ? String(n) : '';
-        stars.forEach((s, i) => {
-          s.classList.toggle('selected', i < n);
-          s.setAttribute('aria-checked', i < n ? 'true' : 'false');
-          s.tabIndex = i === (n - 1) ? 0 : -1;
-        });
-      }
-
-      stars.forEach((s, idx) => {
-        const val = idx + 1;
-        s.addEventListener('mouseover', () => renderHover(val));
-        s.addEventListener('mouseout', () => renderHover(Number(ratingInput.value) || 0));
-        s.addEventListener('click', () => setRating(val));
-        s.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setRating(val); }
-          if (e.key === 'ArrowRight' && idx < stars.length - 1) { stars[idx + 1].focus(); }
-          if (e.key === 'ArrowLeft' && idx > 0) { stars[idx - 1].focus(); }
-        });
-      });
-
-      // expose default state
-      renderHover(0);
-      setRating(0);
-    })();
 
     feedbackForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const nameVal = document.getElementById("name").value || "";
       const emailVal = document.getElementById("email").value.trim() || "";
       const messageVal = document.getElementById("message").value || "";
-      const ratingVal = document.getElementById('ratingValue') ? document.getElementById('ratingValue').value : "";
 
       // Validate email
       const emailEl = document.getElementById("email");
@@ -706,7 +669,7 @@
         return;
       }
 
-      const payload = { name: nameVal, email: emailVal, message: messageVal, rating: ratingVal };
+      const payload = { name: nameVal, email: emailVal, message: messageVal };
       feedbackStatus.textContent = "Preparing file...";
       const format = saveFormat.value || "txt";
       try {

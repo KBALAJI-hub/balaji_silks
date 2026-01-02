@@ -399,18 +399,7 @@
       overflow: hidden;
     }
 
-    /* Star rating styles */
-    .stars .star {
-      color: #dcdcdc;
-      font-size: 1.35rem;
-      cursor: pointer;
-      transition: color .12s ease, transform .08s ease;
-      user-select: none;
-      line-height: 1;
-    }
-    .stars .star:hover { transform: translateY(-2px); }
-    .stars .star.hover, .stars .star.selected { color: #f5c542; text-shadow: 0 1px 0 rgba(0,0,0,0.06); }
-    .stars .star:focus { outline: 2px solid rgba(245,197,66,0.25); outline-offset: 2px; border-radius: 4px; }
+
     #feedback::before, #feedback::after {
       content: "";
       position: absolute;
@@ -611,35 +600,7 @@
       gap: 6px;
       color: var(--dark);
     }
-    .footer-social {
-      display: flex;
-      gap: 10px;
-      margin-top: 6px;
-    }
 
-    /* Social icons for Stay Connected */
-    .social-icons { display:flex; gap:10px; margin-top:8px; }
-    .social-btn {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:44px;
-      height:44px;
-      border-radius:10px;
-      text-decoration:none;
-      border: none;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      color: white;
-      transition: transform 0.14s ease, opacity 0.14s ease;
-    }
-    .social-btn svg { width:20px; height:20px; display:block; }
-    .social-btn:hover { transform: translateY(-4px); opacity: 0.98; }
-    .social-btn.instagram { background: linear-gradient(45deg,#f58529,#dd2a7b,#8134af); color: #fff; }
-    .social-btn.whatsapp { background: #25D366; color: #fff; }
-    .social-btn.mail { background: #D44638; color: #fff; }
-    .social-btn.phone { background: #1c1b1f; color: #fff; }
-    @media (max-width:640px) { .social-btn { width:40px; height:40px; } }
     .footer-pill {
       display: inline-flex;
       align-items: center;
