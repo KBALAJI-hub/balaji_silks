@@ -30,7 +30,6 @@ const products = [
   {
     id: "red-kanjivaram",
     name: "Red Kanjivaram Saree",
-    category: "wedding",
     price: 7499,
     description: "Traditional Kanjivaram with bold red body and zari border.",
     images: [
@@ -49,7 +48,6 @@ const products = [
   {
     id: "blue-banarasi",
     name: "Blue Banarasi Saree",
-    category: "festive",
     price: 6899,
     description: "Handwoven Banarasi with intricate motifs on a royal blue base.",
     images: [
@@ -68,7 +66,6 @@ const products = [
   {
     id: "pastel-linen",
     name: "Pastel Linen Saree",
-    category: "party",
     price: 3199,
     description: "Lightweight linen in soft pastels for everyday elegance.",
     images: [
@@ -87,7 +84,6 @@ const products = [
   {
     id: "mysore-silk",
     name: "Mysore Silk Saree",
-    category: "festive",
     price: 5799,
     description: "Pure Mysore silk with minimalist zari for timeless grace.",
     images: [
@@ -106,7 +102,6 @@ const products = [
   {
     id: "gadwal-pattu",
     name: "Gadwal Pattu Saree",
-    category: "wedding",
     price: 7999,
     description: "Contrast Gadwal pattu with rich temple borders.",
     images: [
@@ -125,7 +120,6 @@ const products = [
   {
     id: "butta-design",
     name: "Butta Design Saree",
-    category: "party",
     price: 4499,
     description: "All-over butta motifs on a soft silk blend for daily chic.",
     images: [
