@@ -597,7 +597,6 @@ if (searchInput) {
 
 const feedbackForm = document.getElementById("feedbackForm");
 const feedbackStatus = document.getElementById("feedbackStatus");
-const saveFormat = document.getElementById("saveFormat");
 
 function buildTextContent(obj) {
   const ts = new Date().toISOString();
@@ -665,15 +664,9 @@ feedbackForm.addEventListener("submit", (e) => {
 
   const payload = { name: nameVal, email: emailVal, message: messageVal };
   feedbackStatus.textContent = "Preparing file...";
-  const format = saveFormat.value || "txt";
-  try {
-    let msg = "";
 
-    if (format === "xlsx") {
-      msg = saveAsXlsx(payload);
-    } else {
-      msg = saveAsTxt(payload);
-    }
+  try {
+    const msg = saveAsTxt(payload);
     feedbackStatus.textContent = msg;
     feedbackForm.reset();
   } catch (err) {
