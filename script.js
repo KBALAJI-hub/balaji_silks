@@ -143,7 +143,7 @@ const formatPrice = (n) => `₹${n.toLocaleString("en-IN")}`;
 function validateEmail(email) {
   if (!email) return false;
   // Basic, permissive email pattern: local@domain.tld
-  const re = /^\S+@\S+\.\S+$/;
+  const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return re.test(String(email).trim());
 }
 
